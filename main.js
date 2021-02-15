@@ -1,4 +1,4 @@
-const canvas = document.querySelector('canvas');
+const canvas = document.querySelector('mycanvas');
 const gl = canvas.getContext('webgl');
 
 if(!gl){
@@ -51,7 +51,7 @@ gl.shaderSource(vertexShader, `
 		gl.Position = vec4(position,1);
 	}
 	`);
-gl.compile(vertexShader);
+gl.compileShader(vertexShader);
 
 const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 gl.shaderSource(fragmentShader,`
