@@ -22,11 +22,11 @@ const colorData = [
 
 ];
 
-function randomVertex(){
+function randomVertex(){ //for random vertex later
 	return [Math.random(),Math.random(),Math.random()];
 }
 
-function randomColor(){
+function randomColor(){ //for random color later
 	return [Math.random(),Math.random(),Math.random()];
 }
 
@@ -39,7 +39,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData), gl.STATIC_DRAW);
 
 const vertexShader = gl.createShader(gl.VERTEX_SHADER);
-gl.shaderSource(vertexShader, '
+gl.shaderSource(vertexShader, `
 	precision mediump float;
 
 	attribute vec3 position;
@@ -50,18 +50,18 @@ gl.shaderSource(vertexShader, '
 		vColor = color;
 		gl.Position = vec4(position,1);
 	}
-	');
+	`);
 gl.compile(vertexShader);
 
 const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-gl.shaderSource(fragmentShader,'
+gl.shaderSource(fragmentShader,`
 	precision mediump float;
 
 	varying vec3 vcolor;
 	void main(){
 		gl_FragColor = vec4(vColor,1);
 	}
-	');
+	`);
 gl.compileShader(fragmentShader);
 console.log(gl.getShaderInfoLog(fragmentShader));
 
