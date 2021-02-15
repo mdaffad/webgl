@@ -7,14 +7,14 @@ if(!gl){
 
 alert('Everything is ready to go!');
 
-const vertexData = [
+const vertexData2 = [
 	1, 1, 0,
 	1, -1, 0,
 	-1, -1, 0,
 	-1, 1, 0,
 ];
 
-const colorData = [
+const colorData2 = [
 	1,0,0,
 	0,1,0,
 	0,0,1,
@@ -22,12 +22,24 @@ const colorData = [
 
 ];
 
-function randomVertex(){ //for random vertex later
+function randomVertex(){
 	return [Math.random(),Math.random(),Math.random()];
 }
 
-function randomColor(){ //for random color later
+let vertexDataR2 = [];
+for (let v1 = 0; v1 < 4; v1++){
+	let chosenVertex = randomVertex();
+	vertexDataR2.push(...chosenVertex);
+}
+
+function randomColor(){
 	return [Math.random(),Math.random(),Math.random()];
+}
+
+let colorDataR2 = [];
+for (let v2 = 0; v2 < 4; v2++){
+	let chosenColor = randomColor();
+	colorDataR2.push(...chosenColor);
 }
 
 const positionBuffer = gl.createBuffer();
