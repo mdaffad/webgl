@@ -8,17 +8,28 @@
     <link rel="stylesheet" href="assets/webgl.css">
 </head> 
   
-<body>  
-    <p id="coordinate">
-        
-    </p><canvas id="mycanvas" width="1080" height="720"> 
-
+<body>
+    <div>
+    <canvas id="mycanvas" width="512"" height="512">
+    Oops ... your browser doesn't support the HTML5 canvas element
     </canvas>
+    </div>
+    <div>
+    <select id = "mymenu" size = "7">
+        <option value = "0">Black</option>
+        <option value = "1">Red</option>
+        <option value = "2">Yellow</option>
+        <option value = "3">Green</option>
+        <option value = "4">Blue</option>
+        <option value = "5">Magenta</option>
+        <option value = "6">Cyan</option>
+    </select>
+    
+    </div>
     
     
-    <!-- Must be placed on the bottom of body -->
-    <script src="mouse.js"></script>
-</body> 
+    <script src='main.js'></script>
+</body>
 
   
 </html> 
