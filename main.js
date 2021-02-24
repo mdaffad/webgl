@@ -6,7 +6,16 @@ function getMousePosition(canvas, event) {
 } 
 
   
-
+const lineData = [
+    0.0, 0.0,
+    1.0, 1.0,
+    -1.0,-1.0,
+    -0.5,0.0
+]
+const colorLineData = [
+    [1.0, 0.0, 0.0, 1.0],
+    [0.0, 0.0, 1.0, 1.0]
+]
 window.onload = function() {
     const canvas = document.getElementById('mycanvas')
     const gl = canvas.getContext('webgl2')
@@ -15,11 +24,7 @@ window.onload = function() {
     }
     gl.clearColor(1,1,1,1)
     gl.clear(gl.COLOR_BUFFER_BIT)
-    const triangleData = [
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0
-    ]
+    
     const vert = `attribute vec2 a_pos;
     void main() {
     gl_Position = vec4(a_pos, 0, 1);
@@ -46,15 +51,22 @@ window.onload = function() {
     gl.linkProgram(shaderProgram)
     const vertBuf = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vertBuf)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleData), gl.STATIC_DRAW)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(lineData), gl.STATIC_DRAW)
 
     // Begin of shader program
     gl.useProgram(shaderProgram)
     const vertexPos = gl.getAttribLocation(shaderProgram, 'a_pos')
     const uniformCol = gl.getUniformLocation(shaderProgram, 'u_fragColor')
     gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0)
-    gl.uniform4fv(uniformCol, [1.0, 0.0, 0.0, 1.0])
-    gl.enableVertexAttribArray(vertexPos)
-    gl.drawArrays(gl.TRIANGLES, 0, triangleData.length/2)
-    const position = getMousePosition(canvasElem, e); 
+    
+    // gl.drawArrays(gl.LINES, 2, 2)
+    // gl.drawArrays(gl.LINES, 0, 2)
+
+    len = lineData.length
+    for(var i = 0; i < len/2; i = i+2) {
+        gl.uniform4fv(uniformCol, colorLineData[i/2])
+        gl.enableVertexAttribArray(vertexPos)
+        gl.drawArrays(gl.LINES, i, 2)
+    }
+    // const position = getMousePosition(canvasElem, e); 
 }
