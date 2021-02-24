@@ -1,8 +1,8 @@
 function getMousePosition(canvas, event) { 
     let rect = canvas.getBoundingClientRect(); 
-    let x = event.clientX - rect.left; 
-    let y = event.clientY - rect.top; 
-    return "coordinate x : " + x + " coordinate y : " + y
+    let x = ((event.clientX - rect.left) - canvas.width/2)/(canvas.width/2);
+    let y = (canvas.height/2 - (event.clientY - rect.top))/(canvas.height/2);
+    return [x,y]
 } 
 
   
@@ -16,8 +16,10 @@ const colorLineData = [
     [1.0, 0.0, 0.0, 1.0],
     [0.0, 0.0, 1.0, 1.0]
 ]
-window.onload = function() {
-    const canvas = document.getElementById('mycanvas')
+first = true
+const canvas = document.getElementById('mycanvas')
+canvas.addEventListener("mousedown", function(e) { 
+    
     const gl = canvas.getContext('webgl2')
     if (!gl) {
     alert('Your browser does not support WebGL')
@@ -61,12 +63,30 @@ window.onload = function() {
     
     // gl.drawArrays(gl.LINES, 2, 2)
     // gl.drawArrays(gl.LINES, 0, 2)
-
-    len = lineData.length
-    for(var i = 0; i < len/2; i = i+2) {
-        gl.uniform4fv(uniformCol, colorLineData[i/2])
+        if(first) {
+            first = false
+            let x,y
+            [x,y] = getMousePosition(canvas,e)
+            lineData.push(x)
+            lineData.push(y)
+            console.log(lineData)
+            colorLineData.push([0.0,1.0,0.0,1.0])
+        }
+        else {
+            first = true;
+            [x,y] = getMousePosition(canvas,e)
+            lineData.push(x)
+            lineData.push(y)
+            console.log(lineData)
+            
+        }
+        len = lineData.length
         gl.enableVertexAttribArray(vertexPos)
-        gl.drawArrays(gl.LINES, i, 2)
-    }
+        var j =0
+        for(var i = 0; i < len/2; i = i+2) {
+            gl.uniform4fv(uniformCol, colorLineData[j])
+            gl.drawArrays(gl.LINES, i, 2)
+            j++
+        }
     // const position = getMousePosition(canvasElem, e); 
-}
+});
