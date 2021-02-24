@@ -1,25 +1,21 @@
+
+
+  
+const lineData = [
+    
+]
+const colorLineData = [
+    
+]
 function getMousePosition(canvas, event) { 
     let rect = canvas.getBoundingClientRect(); 
     let x = ((event.clientX - rect.left) - canvas.width/2)/(canvas.width/2);
     let y = (canvas.height/2 - (event.clientY - rect.top))/(canvas.height/2);
     return [x,y]
 } 
-
-  
-const lineData = [
-    0.0, 0.0,
-    1.0, 1.0,
-    -1.0,-1.0,
-    -0.5,0.0
-]
-const colorLineData = [
-    [1.0, 0.0, 0.0, 1.0],
-    [0.0, 0.0, 1.0, 1.0]
-]
 first = true
 const canvas = document.getElementById('mycanvas')
 canvas.addEventListener("mousedown", function(e) { 
-    
     const gl = canvas.getContext('webgl2')
     if (!gl) {
     alert('Your browser does not support WebGL')
@@ -53,40 +49,48 @@ canvas.addEventListener("mousedown", function(e) {
     gl.linkProgram(shaderProgram)
     const vertBuf = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vertBuf)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(lineData), gl.STATIC_DRAW)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(lineData), gl.DYNAMIC_DRAW)
 
     // Begin of shader program
     gl.useProgram(shaderProgram)
     const vertexPos = gl.getAttribLocation(shaderProgram, 'a_pos')
     const uniformCol = gl.getUniformLocation(shaderProgram, 'u_fragColor')
     gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0)
-    
-    // gl.drawArrays(gl.LINES, 2, 2)
-    // gl.drawArrays(gl.LINES, 0, 2)
-        if(first) {
-            first = false
-            let x,y
-            [x,y] = getMousePosition(canvas,e)
-            lineData.push(x)
-            lineData.push(y)
-            console.log(lineData)
-            colorLineData.push([0.0,1.0,0.0,1.0])
-        }
-        else {
-            first = true;
-            [x,y] = getMousePosition(canvas,e)
-            lineData.push(x)
-            lineData.push(y)
-            console.log(lineData)
-            
-        }
+    len = lineData.length
+    gl.enableVertexAttribArray(vertexPos)
+    var j =0
+    for(var i = 0; i < len/2; i = i+2) {
+        gl.uniform4fv(uniformCol, colorLineData[j])
+        gl.drawArrays(gl.LINES, i, 2)
+        j++
+    }
+    if(first) {
+        first = false
+        let x,y
+        [x,y] = getMousePosition(canvas,e)
+        lineData.push(x)
+        lineData.push(y)
+        colorLineData.push([0.0,1.0,0.0,1.0])
+    }
+    else {
+        first = true;
+        [x,y] = getMousePosition(canvas,e)
+        lineData.push(x)
+        lineData.push(y)
+
+    }
+});
+document.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
         len = lineData.length
+        console.log("enter")
+        gl.vertexAttribPointer(vertexPos, 2, gl.FLOAT, false, 0, 0)
         gl.enableVertexAttribArray(vertexPos)
         var j =0
-        for(var i = 0; i < len/2; i = i+2) {
+        for(var i = 0; i < len/2 - 2; i = i+2) {
             gl.uniform4fv(uniformCol, colorLineData[j])
-            gl.drawArrays(gl.LINES, i, 2)
+            gl.drawArrays(gl.LINES, i, 1)
             j++
         }
-    // const position = getMousePosition(canvasElem, e); 
+    }
 });
